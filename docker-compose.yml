@@ -1,0 +1,31 @@
+version: '2'
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+  blackbox_exporter:
+    image: prom/blackbox-exporter
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+    ports:
+      - '9115:9115'
+  grafana:
+    image: grafana/grafana
+    ports:
+      - '3000:3000'
+  postfix:
+    image: catatnight/docker-postfix
+    environment:
+      - maildomain=mail.example.com
+      - smtp_user=admin:admin
+    ports:
+      - '25:25'
+  dovecot:
+    image: instrumentisto/dovecot
+    volumes:
+      - ./dovecot.cnf:/etc/dovecot/dovecot.conf
+    ports:
+      - '143:143'
